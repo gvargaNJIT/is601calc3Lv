@@ -2,25 +2,32 @@
 
 from calculator.calculation import Calculation
 from calculator.operations import add, subtract, multiply, divide
+from calculator.calcHistory import CalcHistory
+from decimal import Decimal
+from typing import Callable
 
 class Calculator:
+
+    @staticmethod
+    def performOperation(a: Decimal, b: Decimal, operation: Callable [[Decimal, Decimal], Decimal]) -> Decimal:
+        calculation = Calculation(a, b, operation)
+        CalcHistory.add_calculation(calculation)
+        return calculation.get_result()
+
     @staticmethod
     def add(a,b):
-        calculation = Calculation(a, b, add)
-        return calculation.get_result()
+        return Calculator.performOperation(a, b, add)
     
     @staticmethod
     def subtract(a,b):
-        calculation = Calculation(a, b, subtract)
-        return calculation.get_result()
+        return Calculator.performOperation(a, b, subtract)
+    
     @staticmethod
     def multiply(a,b):
-        calculation = Calculation(a, b, multiply)
-        return calculation.get_result()
+        return Calculator.performOperation(a, b, multiply)
+    
     @staticmethod
     def divide(a,b):
         if b == 0:
             return print("Undefined")
-        else:
-            calculation = Calculation(a, b, divide)
-            return calculation.get_result()
+        return Calculator.performOperation(a, b, divide)
