@@ -1,4 +1,5 @@
 '''Calculator Test'''
+
 from calculator import Calculator
 
 def test_addition():
@@ -16,9 +17,3 @@ def test_multiply():
 def test_divide():
     '''Testing division'''
     assert Calculator.divide(4.0,2.0) == 2.0
-
-def test_undefined(capsys):
-    '''Testing dividing by zero'''
-    Calculator.divide(2,0)
-    captured = capsys.readouterr()
-    assert captured.out == "Undefined\n"

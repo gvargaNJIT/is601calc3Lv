@@ -28,6 +28,4 @@ class Calculator:
     
     @staticmethod
     def divide(a,b):
-        if b == 0:
-            return print("Undefined")
         return Calculator.performOperation(a, b, divide)

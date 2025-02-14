@@ -25,11 +25,11 @@ def generate_test_data(num_records):
             b = Decimal('1') if b == Decimal('0') else b
         try:
             if operation_func is divide and b == Decimal('0'):
-                expected = "Undefined\n"
+                expected = "Undefined"
             else:
                 expected = operation_func(a,b)
         except ZeroDivisionError:
-            expected = "Undefined\n"
+            expected = "Undefined"
         yield a, b, operation_name, operation_func, expected
 
 def pytest_addoption(parser):
