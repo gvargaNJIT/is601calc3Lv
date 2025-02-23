@@ -1,20 +1,26 @@
-from app.commands import Commandlist
-from app.commands.exit import ExitCommand
-from app.commands.add import AddCommand
-from app.commands.subtract import SubtractCommand
-from app.commands.multiply import MultiplyCommand
-from app.commands.divide import DivideCommand
+import pkgutil
+import importlib
+from app.commands import Commandlist, Command
 
 class App:
     def __init__(self):
         self.command_list = Commandlist()
 
+    def load_plugins(self):
+        plugins_package = 'app.plugins'
+        for _, plugin_name, is_pkg in pkgutil.iter_modules([plugins_package.replace('.','/')]):
+            if is_pkg:
+                plugin_module = importlib.import_module(f'{plugins_package}.{plugin_name}')
+                for item_name in dir(plugin_module):
+                    item = getattr(plugin_module, item_name)
+                    try:
+                        if issubclass(item, (Command)):
+                            self.command_list.register_command(plugin_name, item())
+                    except TypeError:
+                        continue
+
     def start(self):
-        self.command_list.register_command("add", AddCommand())
-        self.command_list.register_command("subtract", SubtractCommand())
-        self.command_list.register_command("multiply", MultiplyCommand())
-        self.command_list.register_command("divide", DivideCommand())
-        self.command_list.register_command("exit", ExitCommand())
+        self.load_plugins()
 
         print("Welcome to the Calculator! Enter an operation or type 'exit' to leave the program")
         while True:
